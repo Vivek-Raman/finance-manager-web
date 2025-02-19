@@ -11,6 +11,7 @@
   "dependencies": {
     "@mantine/core": "^7.17.0",
     "@mantine/hooks": "^7.17.0",
+    "@mantine/notifications": "^7.17.0",
     "@vercel/speed-insights": "^1.2.0",
     "next": "15.1.7",
     "react": "^19.0.0",

@@ -4,6 +4,8 @@ import '@mantine/core/styles.css';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import {ColorSchemeScript, MantineProvider, mantineHtmlProps, createTheme, AppShell, Burger, Group, Skeleton, Text} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { Notifications } from '@mantine/notifications';
+import Link from 'next/link';
 
 const theme = createTheme({
   primaryColor: 'violet',
@@ -24,6 +26,7 @@ export default function RootLayout({
       <SpeedInsights />
       <body>
         <MantineProvider theme={theme}>
+          <Notifications />
           <AppShell
             header={{ height: 60 }}
             padding="md"
@@ -37,7 +40,8 @@ export default function RootLayout({
             </AppShell.Header>
 
             <AppShell.Navbar p="md">
-              Navbar
+              <Link href='/login'>Login</Link>
+              <Link href='/expenses'>Expenses</Link>
             </AppShell.Navbar>
 
             <AppShell.Main>
