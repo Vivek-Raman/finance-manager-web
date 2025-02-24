@@ -40,8 +40,9 @@ export default function RootLayout({
             </AppShell.Header>
 
             <AppShell.Navbar p="md">
-              <Link href='/login'>Login</Link>
-              <Link href='/expenses'>Expenses</Link>
+              <Link href='/login' onClick={toggle}>Login</Link>
+              <Link href='/dashboard' onClick={toggle}>Dashboard</Link>
+              <Link href='/expenses' onClick={toggle}>Expenses</Link>
             </AppShell.Navbar>
 
             <AppShell.Main>

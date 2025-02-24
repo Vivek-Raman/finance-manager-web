@@ -4,8 +4,12 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <Flex justify={"center"} align={"center"}>
-      <Text>Dashboard</Text>
-      <Link href={'/expenses'}>To Expenses</Link>
+      <div>
+        <Text>Dashboard</Text>
+      </div>
+      <div>
+        <Link href={'/expenses'}>To Expenses</Link>
+      </div>
     </Flex>
   );
 }
