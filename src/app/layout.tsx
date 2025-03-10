@@ -2,10 +2,9 @@
 
 import '@mantine/core/styles.css';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import {ColorSchemeScript, MantineProvider, mantineHtmlProps, createTheme, AppShell, Burger, Group, Skeleton, Text} from '@mantine/core';
+import {ColorSchemeScript, MantineProvider, mantineHtmlProps, createTheme, AppShell, Burger, Group, Skeleton, Text, NavLink} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Notifications } from '@mantine/notifications';
-import Link from 'next/link';
 
 const theme = createTheme({
   primaryColor: 'violet',
@@ -40,9 +39,9 @@ export default function RootLayout({
             </AppShell.Header>
 
             <AppShell.Navbar p="md">
-              <Link href='/login' onClick={toggle}>Login</Link>
-              <Link href='/dashboard' onClick={toggle}>Dashboard</Link>
-              <Link href='/expenses' onClick={toggle}>Expenses</Link>
+              <NavLink href='/login' onClick={toggle} label='Login' />
+              <NavLink href='/dashboard' onClick={toggle} label='Dashboard' />
+              <NavLink href='/expenses' onClick={toggle} label='Expenses' />
             </AppShell.Navbar>
 
             <AppShell.Main>
