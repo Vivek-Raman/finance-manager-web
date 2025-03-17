@@ -1,6 +1,6 @@
 'use client';
 
-import { Tabs, Text, Title } from '@mantine/core';
+import { Text, Title } from '@mantine/core';
 
 export default function Test() {
   return (
