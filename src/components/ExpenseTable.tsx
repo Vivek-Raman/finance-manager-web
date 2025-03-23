@@ -2,31 +2,74 @@
 
 import { Expense } from "@/types/Expense";
 import { formatDate } from "@/utils/date";
-import { Group, Pagination, Pill, Table } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { Checkbox, Flex, Group, MantineComponent, Pagination, Pill, Skeleton, Table } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { JSX, useEffect, useState } from "react";
 
 export default function ExpenseTable() {
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expense[]>([]);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const size = 25;
 
+  const [selectedRows, setSelectedRows] = useState<Expense[]>([]);
+
   useEffect(() => {
-    (async () => {
-      const response = await fetch(`/api/v1/expenses?page=${page-1}&size=${size}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then(r => {
-        return r.json();
-      });
-      setData(response.data);
-      setTotal(response.total);
-    })();
+    fetchExpenses();
   }, [page]);
 
+  const fetchExpenses = async () => {
+    setLoading(true);
+    const response = await fetch(`/api/v1/expenses?page=${page-1}&size=${size}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(r => {
+      return r.json();
+    }).catch(err => {
+      notifications.show({
+        message: 'Failed to fetch expenses',
+        content: 'asd',
+      });
+    });
+    if (!response || !response.data) {
+      notifications.show({
+        message: 'Failed to fetch expenses',
+        content: 'asd',
+      });
+      return;
+    }
+    setData(response.data);
+    setTotal(response.total);
+    setLoading(false);
+  };
+
   const buildRows = () => {
+    if (loading) {
+      const rows: JSX.Element[] = [];
+      for (let i = 0; i < size; ++i) {
+        rows.push(<Table.Tr key={i}>
+          <Table.Td><Skeleton height={16} radius={16} /></Table.Td>
+          <Table.Td><Skeleton height={16} width={48} radius={16} /></Table.Td>
+          <Table.Td><Skeleton height={16} radius={16} /></Table.Td>
+          <Table.Td>
+            <Flex gap={8}>
+              <Skeleton height={16} radius={16} width={48} />
+              {new Array(Math.floor(Math.random() * 3)).fill(0).map((_, index) =>
+                <Skeleton key={index} height={16} radius={16} width={48} />
+              )}
+            </Flex>
+          </Table.Td>
+          <Table.Td>
+            <Skeleton height={24} width={24} radius={4} />
+          </Table.Td>
+        </Table.Tr>);
+      }
+      return rows;
+    }
+
     return data.map((row: Expense) =>
       <Table.Tr key={row.id}>
         <Table.Td>{row.summary}</Table.Td>
@@ -38,18 +81,34 @@ export default function ExpenseTable() {
             {row.tags?.map(tag => <Pill key={tag}>{tag}</Pill>)}
           </Group>
         </Table.Td>
+        <Table.Td>
+          <Checkbox
+            aria-label="Select row"
+            checked={selectedRows.includes(row)}
+            onChange={(event) =>
+              setSelectedRows(
+                event.currentTarget.checked
+                  ? [...selectedRows, row]
+                  : selectedRows.filter(r => r !== row)
+              )
+            }
+          />
+        </Table.Td>
       </Table.Tr>
     );
   };
 
   return (<>
-    <Table p='md'>
+    <Table
+        stickyHeader stickyHeaderOffset='60'
+        highlightOnHover>
       <Table.Thead>
           <Table.Tr>
             <Table.Th>Summary</Table.Th>
             <Table.Th>Amount</Table.Th>
             <Table.Th>Date</Table.Th>
             <Table.Th>Tags</Table.Th>
+            <Table.Th>Action</Table.Th>
           </Table.Tr>
       </Table.Thead>
       <Table.Tbody>

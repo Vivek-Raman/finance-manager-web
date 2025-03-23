@@ -1,15 +1,16 @@
 'use client';
 
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import {ColorSchemeScript, MantineProvider, mantineHtmlProps, createTheme, AppShell, Burger, Group, Skeleton, Text} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Notifications } from '@mantine/notifications';
-import Link from 'next/link';
+import { NavbarContents } from '@/components/nav/NavbarContents';
 
 const theme = createTheme({
   primaryColor: 'violet',
-})
+});
 
 export default function RootLayout({
   children,
@@ -39,11 +40,7 @@ export default function RootLayout({
               </Group>
             </AppShell.Header>
 
-            <AppShell.Navbar p="md">
-              <Link href='/login' onClick={toggle}>Login</Link>
-              <Link href='/dashboard' onClick={toggle}>Dashboard</Link>
-              <Link href='/expenses' onClick={toggle}>Expenses</Link>
-            </AppShell.Navbar>
+            <NavbarContents closeFn={toggle} />
 
             <AppShell.Main>
               {children}
