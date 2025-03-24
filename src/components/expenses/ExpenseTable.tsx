@@ -10,7 +10,7 @@ export interface ExpenseTableProps {
   selection: { selectedRows: Expense[], setSelectedRows: Function }
   sort_by?: string;
   sort_dir?: string;
-  tags?: string;
+  tags?: string[];
 }
 
 export default function ExpenseTable(props: ExpenseTableProps) {
@@ -32,7 +32,7 @@ export default function ExpenseTable(props: ExpenseTableProps) {
     let urlPath = `/api/v1/expenses?page=${page-1}&size=${size}`;
     sort_by && (urlPath += `&sort_by=${sort_by}`);
     sort_dir && (urlPath += `&sort_dir=${sort_dir}`);
-    tags && (urlPath += `&tags=${tags}`);
+    tags && (urlPath += `&tags=${tags?.join(',')}`);
 
     const response = await fetch(urlPath, {
       method: 'GET',

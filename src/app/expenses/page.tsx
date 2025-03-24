@@ -11,7 +11,11 @@ export default function Expenses() {
   const [selectedRows, setSelectedRows] = useState<Expense[]>([]);
   return (<Stack>
     <UpdateExpenses selection={{ selectedRows, setSelectedRows }} />
-    <ExpenseTable selection={{ selectedRows, setSelectedRows }} />
+    <ExpenseTable
+      sort_by='Date'
+      sort_dir='desc'
+      tags={ [] }
+      selection={{ selectedRows, setSelectedRows }} />
     <UpdateExpenses selection={{ selectedRows, setSelectedRows }} />
   </Stack>);
 }
