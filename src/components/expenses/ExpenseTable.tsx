@@ -2,18 +2,22 @@
 
 import { Expense } from "@/types/Expense";
 import { formatDate } from "@/utils/date";
-import { Checkbox, Flex, Group, MantineComponent, Pagination, Pill, Skeleton, Table } from "@mantine/core";
+import { Button, Checkbox, Flex, Group, MantineComponent, Pagination, Pill, Skeleton, Table, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { JSX, useEffect, useState } from "react";
+import { UpdateExpenses } from "./UpdateExpenses";
 
-export default function ExpenseTable() {
+export interface ExpenseTableProps {
+  selection: { selectedRows: Expense[], setSelectedRows: Function }
+}
+
+export default function ExpenseTable(props: ExpenseTableProps) {
+  const { selection } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expense[]>([]);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const size = 25;
-
-  const [selectedRows, setSelectedRows] = useState<Expense[]>([]);
 
   useEffect(() => {
     fetchExpenses();
@@ -84,12 +88,12 @@ export default function ExpenseTable() {
         <Table.Td>
           <Checkbox
             aria-label="Select row"
-            checked={selectedRows.includes(row)}
+            checked={selection.selectedRows.includes(row)}
             onChange={(event) =>
-              setSelectedRows(
+              selection.setSelectedRows(
                 event.currentTarget.checked
-                  ? [...selectedRows, row]
-                  : selectedRows.filter(r => r !== row)
+                  ? [...selection.selectedRows, row]
+                  : selection.selectedRows.filter(r => r !== row)
               )
             }
           />
@@ -115,6 +119,7 @@ export default function ExpenseTable() {
         { buildRows() }
       </Table.Tbody>
     </Table>
+
     <Pagination p='md'
       value={page}
       onChange={setPage}

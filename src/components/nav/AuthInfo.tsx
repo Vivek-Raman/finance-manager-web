@@ -1,12 +1,12 @@
 'use client';
 
-import { Button, Space, Stack, Text, TextInput, Title } from "@mantine/core";
+import { Button, Flex, Space, Stack, Text, TextInput, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 import { useAuthStore } from '@/stores/auth/AuthStore'
 import { User } from "@/types/User";
 
-export default function Login() {
+export const AuthInfo = () => {
   const [apiKey, setApiKey] = useState<string>();
   const auth = useAuthStore();
 
@@ -65,13 +65,13 @@ export default function Login() {
   }
 
   if (auth.user) {
-    return (<Stack>
+    return (<Flex align='center' gap='32'>
         <Text>Logged in as {auth.user.fullName}!</Text>
-        <Button onClick={async (event) => {
+        <Button variant="subtle" onClick={async (event) => {
           event.preventDefault();
           await doLogout();
         }}>Log out</Button>
-      </Stack>
+      </Flex>
     );
   }
   return (<Stack>
