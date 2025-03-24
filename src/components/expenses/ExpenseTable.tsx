@@ -2,17 +2,21 @@
 
 import { Expense } from "@/types/Expense";
 import { formatDate } from "@/utils/date";
-import { Button, Checkbox, Flex, Group, MantineComponent, Pagination, Pill, Skeleton, Table, Text } from "@mantine/core";
+import { Checkbox, Flex, Group, Pagination, Pill, Skeleton, Table } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { JSX, useEffect, useState } from "react";
-import { UpdateExpenses } from "./UpdateExpenses";
 
 export interface ExpenseTableProps {
   selection: { selectedRows: Expense[], setSelectedRows: Function }
+  sort_by?: string;
+  sort_dir?: string;
+  tags?: string;
 }
 
 export default function ExpenseTable(props: ExpenseTableProps) {
   const { selection } = props;
+  const { sort_by, sort_dir, tags } = props;
+
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expense[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -25,7 +29,12 @@ export default function ExpenseTable(props: ExpenseTableProps) {
 
   const fetchExpenses = async () => {
     setLoading(true);
-    const response = await fetch(`/api/v1/expenses?page=${page-1}&size=${size}`, {
+    let urlPath = `/api/v1/expenses?page=${page-1}&size=${size}`;
+    sort_by && (urlPath += `&sort_by=${sort_by}`);
+    sort_dir && (urlPath += `&sort_dir=${sort_dir}`);
+    tags && (urlPath += `&tags=${tags}`);
+
+    const response = await fetch(urlPath, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
